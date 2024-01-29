@@ -22,3 +22,67 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+
+# Ignore the following files and directories
+.DS_Store
+node_modules/
+build/
+*.log
+*.swp
+
+# Ignore user-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Ignore IDE and editor-specific files
+.vscode/
+.idea/
+*.sublime-*
+*.sublime-workspace
+*.komodoproject
+*.komodotools
+*.kate-swp
+*.kate-swp
+*.kate-swp
+*.nvim
+*.nuxt
+*.komodoproject
+*.komodotools
+*.code-workspace
+
+# Ignore compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Ignore dependencies
+/lib/
+/libs/
+/vendor/
+/node_modules/
+/bower_components/
+
+# Ignore build output
+/dist/
+/build/
+/out/
+
+# Ignore logs and databases
+*.log
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+
+# Ignore package manager configuration files
+npm-debug.log
+yarn-error.log
+/8puzzle/target/
