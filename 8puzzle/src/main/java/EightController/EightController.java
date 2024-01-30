@@ -31,10 +31,15 @@ public class EightController extends JLabel implements VetoableChangeListener {
         return tileInformation.get(tileLabel);
     }
 
+    private void setTilePosition(int tileLabel, int tilePosition) {
+        tileInformation.put(tileLabel, tilePosition);
+        System.out.println("registered " + tileLabel + " at " + tilePosition);
+    }
+
 
     // Register a tile with the controller
     public void registerTile(EightTile tile) {
-        tileInformation.put(tile.getPosition(), tile.getTileLabel());
+        setTilePosition(tile.getTileLabel(), tile.getPosition());
         tile.addVetoableChangeListener(this);
     }
     
@@ -49,6 +54,7 @@ public class EightController extends JLabel implements VetoableChangeListener {
         
         int oldLabel = (int) evt.getOldValue();
         int newLabel = (int) evt.getNewValue();
+
         int tilePosition = getTilePosition(oldLabel);
         int currentHolePosition = getTilePosition(9);
 
@@ -65,27 +71,31 @@ public class EightController extends JLabel implements VetoableChangeListener {
 
     private boolean isValidMove(int tilePosition, int oldLabel, int newLabel, int currentHolePosition) {
 
-        // print for debug
-        System.out.println("tilePosition: " + tilePosition);
-        System.out.println("oldLabel: " + oldLabel);
-        System.out.println("newLabel: " + newLabel);
-        System.out.println("currentHolePosition: " + currentHolePosition);
-
-        if (oldLabel == 9 || !isAdjacent(tilePosition, currentHolePosition)) {
+        if (oldLabel == 9 || !areAdjacent(tilePosition, currentHolePosition)) {
             return false;
         }
 
         return true;
     }
 
-    private boolean isAdjacent(int position1, int position2) {
+    /**
+     * @param pos1 The position of the first tile.
+     * @param pos2 The position of the second tile.
+     * @return True if the positions are adjacent, false otherwise.
+     */
+    private boolean areAdjacent(int position1, int position2) {
+        int riga1 = (position1 - 1) / 3;
+        int colonna1 = (position1 - 1) % 3;
+        int riga2 = (position2 - 1) / 3;
+        int colonna2 = (position2 - 1) % 3;
 
-        int row1 = (position1 - 1) / 3;
-        int col1 = (position1 - 1) % 3;
-        int row2 = (position2 - 1) / 3;
-        int col2 = (position2 - 1) % 3;
-
-        return Math.abs(row1 - row2) + Math.abs(col1 - col2) == 1;
+        boolean adjacent = Math.abs(riga1 - riga2) + Math.abs(colonna1 - colonna2) == 1;
+        if (adjacent){
+            System.out.println("positions " +position1+" and "+position2+" are adjacent");
+        } else {
+            System.out.println("positions " +position1+" and "+position2+" are not adjacent");
+        }
+        return adjacent;
     }
 
 

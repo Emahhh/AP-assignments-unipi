@@ -87,14 +87,6 @@ public class EightBoard extends JFrame {
         tiles = new ArrayList<>();
         for (int i = 1; i <= 9; i++) {
             EightTile tile = new EightTile(i, i);
-            tiles.add(tile);
-        }
-        // Shuffle the tiles to create a random configuration
-        Collections.shuffle(tiles);
-
-        // Set up the grid layout and add tiles to the board
-        for (EightTile tile : tiles) {
-
             controller.registerTile(tile);
             tile.addActionListener(new ActionListener() {
                 @Override
@@ -103,6 +95,8 @@ public class EightBoard extends JFrame {
                 }
             });
         }
+
+        // TODO: call restart to shuffle
     }
 
 

@@ -21,12 +21,7 @@ public class EightTile extends JButton implements ActionListener {
 
     public EightTile(int position, int label) {
         this.position = position;
-        this.tileLabel = label;
-        try {
-            setTileLabel(label); // to update appearance
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
+        setTileLabel(label); // to update appearance
         addActionListener(this); // Register as a listener for button click events
     }
 
@@ -43,9 +38,8 @@ public class EightTile extends JButton implements ActionListener {
 
 
     private void setTileLabel(int newLabel){
-        
-        int oldLabel = tileLabel;
-        tileLabel = newLabel;
+    
+        this.tileLabel = newLabel;
 
         if (newLabel == 9) {
             setBackground(Color.GRAY);  // Current hole
@@ -103,6 +97,5 @@ public class EightTile extends JButton implements ActionListener {
         return this.tileLabel;
     }
 
-    //TODO: reset
 
 }
