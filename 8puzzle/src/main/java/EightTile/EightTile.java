@@ -1,7 +1,7 @@
 package EightTile;
 
 import javax.swing.JButton;
-
+import javax.swing.Timer;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -21,7 +21,7 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
     private final VetoableChangeSupport vetos = new VetoableChangeSupport(this); // so that the controller can veto changes to the label
 
     // Colors
-    private final Color holeColor = Color.darkGray;
+    private final Color holeColor = Color.lightGray;
     private final Color wrongPositionColor = Color.YELLOW;
     private final Color rightPositionColor = Color.GREEN;
     private final Color blinkColor = Color.RED;
@@ -33,6 +33,7 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
         setTileLabel(label); // to update appearance
         addActionListener(this); // Register as a listener for button click events
 
+        setOpaque(true);
         setFont(new java.awt.Font("Monospaced", 1, 40));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -65,14 +66,14 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
         this.tileLabel = newLabel;
 
         if (newLabel == 9) { // Current hole
-            setBackground(new java.awt.Color(255, 255, 51));
+            setBackground(holeColor);
             setText("");
             return;
         } else if (position == newLabel) {
-            setBackground(new java.awt.Color(255, 255, 51));
+            setBackground(rightPositionColor);
             setText(Integer.toString(newLabel));
         } else {
-            setBackground(new java.awt.Color(255, 255, 51));
+            setBackground(wrongPositionColor);
             setText(Integer.toString(newLabel));
         }
 
@@ -99,7 +100,19 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
 
             setTileLabel(9);
         } catch (PropertyVetoException e1) {
-            // TODO: flash color to red for half a second
+            // I change temporarly the color of the tile
+            setBackground(blinkColor);
+            
+            // after half a second, revert the color to its right one
+            Timer timer = new Timer(500, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    setTileLabel(getTileLabel()); // by doing this, the setter changes the color to its right one 
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+
         }
     }
 
