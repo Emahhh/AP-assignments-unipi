@@ -21,10 +21,10 @@ public class EightBoard extends JFrame {
     private JButton restartButton;
     private JButton flipButton;
 
+    private final Color backgroundColor = new Color(240, 240, 240);
+
     public EightBoard() {
         controller = new EightController();
-        
-    
 
         // Initializing tiles -----------------------------
         tiles = new ArrayList<>();
@@ -77,11 +77,12 @@ public class EightBoard extends JFrame {
             throw new IllegalStateException("Controller is not initialized");
         }
     
-        // Create a panel for the tiles
+        // Refactored code block for improved aesthetics
+
         JPanel tilePanel = new JPanel();
-        tilePanel.setLayout(new GridLayout(3, 3));
-        tilePanel.setBackground(Color.lightGray); // TODO: style
-        tilePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        tilePanel.setLayout(new GridLayout(3, 3, 0, 0));
+        tilePanel.setBackground(backgroundColor);
+        tilePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); 
         for (EightTile tile : tiles) {
             tilePanel.add(tile);
         }
@@ -139,7 +140,7 @@ public class EightBoard extends JFrame {
         }
 
         try{
-            // ask the controller to check if the hole is at position 9
+            // asks the controller to check if the hole is at position 9
             if (!controller.isHoleAtPositionNine()) {
                 throw new IllegalStateException("Hole is not at position 9.");
             }
@@ -148,9 +149,8 @@ public class EightBoard extends JFrame {
             int temp = tile1.getTileLabel();
             tile1.setTileLabel(tile2.getTileLabel());
             tile2.setTileLabel(temp);
-        } catch(Exception e){
-            e.printStackTrace();
-            // alert the user
+        } catch(IllegalStateException e){
+            // alert the user about the rules
             JOptionPane.showMessageDialog(this, "Flipping is only permitted when the hole is at position 9.", "Error", JOptionPane.ERROR_MESSAGE);
         }
         

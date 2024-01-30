@@ -17,14 +17,15 @@ import events.*;
 public class EightTile extends JButton implements ActionListener, RestartEventListener {
     
     private final int position;
-    private int tileLabel; //TODO: both bound and costrained
+    private int tileLabel;
     private final VetoableChangeSupport vetos = new VetoableChangeSupport(this); // so that the controller can veto changes to the label
 
     // Colors
-    private final Color holeColor = Color.lightGray;
-    private final Color wrongPositionColor = Color.YELLOW;
-    private final Color rightPositionColor = Color.GREEN;
-    private final Color blinkColor = Color.RED;
+    private final Color holeColor = new Color(200, 200, 200); // Light Gray
+    private final Color wrongPositionColor = new Color(255, 255, 150); // Pale Yellow
+    private final Color rightPositionColor = new Color(150, 255, 150); // Pale Green
+    private final Color blinkColor = new Color(255, 120, 120); // Light Coral
+
     
 
 
