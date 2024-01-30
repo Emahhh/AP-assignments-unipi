@@ -108,10 +108,11 @@ public class EightBoard extends JFrame {
      * Restarts the game by shuffling the tiles and resetting their labels
      */
     private void restartGame() {
-
-        Collections.shuffle(tiles);
+        // make a copy of this.tiles so that we can shuffle it without changing this.tiles
+        List<EightTile> shuffledTiles = new ArrayList<>(tiles);
+        Collections.shuffle(shuffledTiles);
         int label =1;
-        for (EightTile tile : tiles) {
+        for (EightTile tile : shuffledTiles) {
             RestartEvent event = new RestartEvent(label);
             tile.onRestart(event);
             if (label == 9) {
@@ -129,9 +130,30 @@ public class EightBoard extends JFrame {
      * Switches the labels of tiles in position 1 and 2, but only if the hole is in position 9, otherwise it has no effect
      */
     private void flipTiles() {
-        // TODO: implement
-        // TODO: etting the Controller to check if the flipping is permitted
-        // switches the labels of tiles in position 1 and 2, but only if the hole is in position 9, otherwise it has no effect
+        EightTile tile1 = tiles.get(0);
+        EightTile tile2 = tiles.get(1);
+
+        if (tile1.getPosition() != 1 || tile2.getPosition() != 2) {
+            System.err.println("Error. Tiles positions are: " + tile1.getPosition() + " and " + tile2.getPosition());
+            return;
+        }
+
+        try{
+            // ask the controller to check if the hole is at position 9
+            if (!controller.isHoleAtPositionNine()) {
+                throw new IllegalStateException("Hole is not at position 9.");
+            }
+
+            // do the flipping
+            int temp = tile1.getTileLabel();
+            tile1.setTileLabel(tile2.getTileLabel());
+            tile2.setTileLabel(temp);
+        } catch(Exception e){
+            e.printStackTrace();
+            // alert the user
+            JOptionPane.showMessageDialog(this, "Flipping is only permitted when the hole is at position 9.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
 
     private void handleTileClick(EightTile clickedTile) {

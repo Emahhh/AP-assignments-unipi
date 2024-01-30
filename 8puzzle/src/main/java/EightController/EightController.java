@@ -92,6 +92,11 @@ public class EightController extends JLabel implements VetoableChangeListener {
     }
 
 
+    public boolean isHoleAtPositionNine() {
+        return this.holeTile.getPosition() == 9;
+    }
+
+
     private void restart () {
         // TODO: Implement the logic to restart the game
     }
