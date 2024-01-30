@@ -2,7 +2,6 @@ package EightTile;
 
 import javax.swing.JButton;
 
-import events.TileChangeEvent;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -81,16 +80,12 @@ public class EightTile extends JButton implements ActionListener {
         int oldLabel = getTileLabel();
         int newLabel = 9;
 
-        System.out.println("oldLabel: " + oldLabel);
-        System.out.println("newLabel: " + newLabel);
-
         if (newLabel == oldLabel) {
             return;
         }
 
         try {
-            TileChangeEvent tileChangeEvent = new TileChangeEvent(this, "label", oldLabel, newLabel, position);
-            vetos.fireVetoableChange(tileChangeEvent);
+            vetos.fireVetoableChange("label", oldLabel, newLabel);
 
             setTileLabel(9);
             // TODO: pass, in some way, its previous label value to the current hole

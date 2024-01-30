@@ -3,7 +3,6 @@ package EightController;
 import javax.swing.JLabel;
 
 import EightTile.EightTile;
-import events.TileChangeEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
@@ -34,8 +33,9 @@ public class EightController extends JLabel implements VetoableChangeListener {
 
 
     // Register a tile with the controller
-    public void registerTile(int tilePosition, int tileLabel) {
-        tileInformation.put(tilePosition, tileLabel);
+    public void registerTile(EightTile tile) {
+        tileInformation.put(tile.getPosition(), tile.getTileLabel());
+        tile.addVetoableChangeListener(this);
     }
     
 

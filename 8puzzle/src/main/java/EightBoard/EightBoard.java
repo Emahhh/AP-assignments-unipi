@@ -95,7 +95,7 @@ public class EightBoard extends JFrame {
         // Set up the grid layout and add tiles to the board
         for (EightTile tile : tiles) {
 
-            controller.registerTile(tile.getPosition(), tile.getTileLabel());
+            controller.registerTile(tile);
             tile.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
