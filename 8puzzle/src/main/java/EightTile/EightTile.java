@@ -107,7 +107,9 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
             Timer timer = new Timer(500, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    setTileLabel(getTileLabel()); // by doing this, the setter changes the color to its right one 
+                    // by doing this, the setter changes the color to its right one
+                    // this solution avoids error due to the user swapping tiles before the timer ends
+                    setTileLabel(getTileLabel()); 
                 }
             });
             timer.setRepeats(false);
