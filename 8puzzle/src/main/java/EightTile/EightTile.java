@@ -45,11 +45,17 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
 
 
     private void setTileLabel(int newLabel){
+
+        if (newLabel < 1 || newLabel > 9) {
+            throw new IllegalArgumentException("Tile label must be between 1 and 9");
+        }
+
+        System.out.println("Setting label " + newLabel + " for tile " + position);
     
         this.tileLabel = newLabel;
 
-        if (newLabel == 9) {
-            setBackground(Color.GRAY);  // Current hole
+        if (newLabel == 9) { // Current hole
+            setBackground(Color.GRAY);  
             setText("");
             return;
         } else if (position == newLabel) {

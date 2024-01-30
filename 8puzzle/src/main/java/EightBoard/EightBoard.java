@@ -39,9 +39,6 @@ public class EightBoard extends JFrame {
             });
         }
 
-        // TODO: call restart to shuffle
-    
-
 
 
 
@@ -95,6 +92,10 @@ public class EightBoard extends JFrame {
         // Add the panels to the frame
         this.add(tilePanel, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
+
+
+        // I call restart so that it shuffles the tiles
+        restartGame();
     }
 
 
@@ -104,14 +105,17 @@ public class EightBoard extends JFrame {
      * Restarts the game by shuffling the tiles and resetting their labels
      */
     private void restartGame() {
+
         Collections.shuffle(tiles);
-        for (int i = 0; i < 9; i++) {
-            RestartEvent event = new RestartEvent(i+1);
+        int i =1;
             for (EightTile tile : tiles) {
+                RestartEvent event = new RestartEvent(i);
                 tile.onRestart(event);
+                i++;
             }
-        }
+        
     }
+
 
     
     /**
