@@ -13,13 +13,25 @@ import java.util.Map;
 
 public class EightController extends JLabel implements VetoableChangeListener {
 
-     private Map<Integer, Integer> tileInformation; // Map to store information about each tile, since we cannot access tiles' information directly
-
+    /**
+     * Map to store information about each tile, since we cannot access tiles' information directly
+     * Maps tileLabel to tilePosition.
+     */ 
+    private Map<Integer, Integer> tileInformation; 
+    
 
     public EightController() {
         tileInformation = new HashMap<>();
         setText("START"); // initial message
     }
+
+    /**
+     * Given a label, this method returns the position of the tile with that label.
+     */
+    private int getTilePosition(int tileLabel) {
+        return tileInformation.get(tileLabel);
+    }
+
 
     // Register a tile with the controller
     public void registerTile(int tilePosition, int tileLabel) {
@@ -31,28 +43,35 @@ public class EightController extends JLabel implements VetoableChangeListener {
     public void vetoableChange(PropertyChangeEvent evt) throws PropertyVetoException {
         String propertyName = evt.getPropertyName();
 
-        if ("label".equals(propertyName)) {
-            int oldLabel = (int) evt.getOldValue();
-            int newLabel = (int) evt.getNewValue();
-            int tilePosition = ((TileChangeEvent) evt).getTilePosition();
-
-            // Check the veto policy
-            if (!isValidMove(tilePosition, newLabel)) {
-                setText("KO");
-                throw new PropertyVetoException("Illegal move", evt);
-            } else {
-                setText("OK");
-            }
+        if (!"label".equals(propertyName)){
+            return;
         }
+        
+        int oldLabel = (int) evt.getOldValue();
+        int newLabel = (int) evt.getNewValue();
+        int tilePosition = getTilePosition(oldLabel);
+        int currentHolePosition = getTilePosition(9);
+
+        // Check the veto policy
+        if (!isValidMove(tilePosition, oldLabel, newLabel, currentHolePosition)) {
+            setText("KO");
+            throw new PropertyVetoException("Illegal move", evt);
+        } else {
+            setText("OK");
+        }
+    
     }
 
 
+    private boolean isValidMove(int tilePosition, int oldLabel, int newLabel, int currentHolePosition) {
 
+        // print for debug
+        System.out.println("tilePosition: " + tilePosition);
+        System.out.println("oldLabel: " + oldLabel);
+        System.out.println("newLabel: " + newLabel);
+        System.out.println("currentHolePosition: " + currentHolePosition);
 
-    private boolean isValidMove(int tilePosition, int newLabel) {
-
-        Integer currentHoleLabel = tileInformation.get(9);
-        if (tilePosition == 9 || !isAdjacent(tilePosition, 9) || newLabel == currentHoleLabel) {
+        if (oldLabel == 9 || !isAdjacent(tilePosition, currentHolePosition)) {
             return false;
         }
 

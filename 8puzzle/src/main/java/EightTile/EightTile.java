@@ -81,6 +81,9 @@ public class EightTile extends JButton implements ActionListener {
         int oldLabel = getTileLabel();
         int newLabel = 9;
 
+        System.out.println("oldLabel: " + oldLabel);
+        System.out.println("newLabel: " + newLabel);
+
         if (newLabel == oldLabel) {
             return;
         }
