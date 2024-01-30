@@ -12,8 +12,10 @@ import java.beans.VetoableChangeListener;
 import java.beans.VetoableChangeSupport;
 import java.beans.PropertyVetoException;
 
-public class EightTile extends JButton implements ActionListener {
+import events.*;
 
+public class EightTile extends JButton implements ActionListener, RestartEventListener {
+    
     private final int position;
     private int tileLabel; //TODO: both bound and costrained
     private final VetoableChangeSupport vetos = new VetoableChangeSupport(this); // so that the controller can veto changes to the label
@@ -23,6 +25,11 @@ public class EightTile extends JButton implements ActionListener {
         this.position = position;
         setTileLabel(label); // to update appearance
         addActionListener(this); // Register as a listener for button click events
+    }
+
+    @Override
+    public void onRestart(RestartEvent event) {
+        setTileLabel(event.getNewLabel());
     }
 
 

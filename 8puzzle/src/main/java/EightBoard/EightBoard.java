@@ -11,6 +11,8 @@ import java.util.List;
 import EightTile.EightTile;
 import EightController.EightController;
 
+import events.*;
+
 public class EightBoard extends JFrame {
 
     private List<EightTile> tiles;
@@ -22,10 +24,22 @@ public class EightBoard extends JFrame {
     public EightBoard() {
         controller = new EightController();
     
-        initializeTiles();
-    
-        // Register tiles and controller as listeners for the Restart event
-        // Implement the RESTART and FLIP button actions
+
+        // Initializing tiles -----------------------------
+        tiles = new ArrayList<>();
+        for (int i = 1; i <= 9; i++) {
+            EightTile tile = new EightTile(i, i);
+            tiles.add(tile);
+            controller.registerTile(tile);
+            tile.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    handleTileClick((EightTile) e.getSource());
+                }
+            });
+        }
+
+        // TODO: call restart to shuffle
     
 
 
@@ -83,24 +97,6 @@ public class EightBoard extends JFrame {
         this.add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private void initializeTiles() {
-        tiles = new ArrayList<>();
-        for (int i = 1; i <= 9; i++) {
-            EightTile tile = new EightTile(i, i);
-            controller.registerTile(tile);
-            tile.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    handleTileClick((EightTile) e.getSource());
-                }
-            });
-        }
-
-        // TODO: call restart to shuffle
-    }
-
-
-
 
 
     /**
@@ -108,16 +104,12 @@ public class EightBoard extends JFrame {
      * Restarts the game by shuffling the tiles and resetting their labels
      */
     private void restartGame() {
-        // TODO: Implement the logic to restart the game
-
-        // shuffle
-
-        // pass the new shuffled value to all the tiles registred to the Restart event
-
-
         Collections.shuffle(tiles);
         for (int i = 0; i < 9; i++) {
-            tiles.get(i).reset(i + 1);
+            RestartEvent event = new RestartEvent(i+1);
+            for (EightTile tile : tiles) {
+                tile.onRestart(event);
+            }
         }
     }
 

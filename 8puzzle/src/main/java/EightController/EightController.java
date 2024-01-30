@@ -12,34 +12,15 @@ import java.util.Map;
 
 public class EightController extends JLabel implements VetoableChangeListener {
 
-    /**
-     * Map to store information about each tile, since we cannot access tiles' information directly
-     * Maps tileLabel to tilePosition.
-     */ 
-    private Map<Integer, Integer> tileInformation; 
-    
+    private int holePosition = -1; // TODO: update the hole position
 
     public EightController() {
-        tileInformation = new HashMap<>();
         setText("START"); // initial message
-    }
-
-    /**
-     * Given a label, this method returns the position of the tile with that label.
-     */
-    private int getTilePosition(int tileLabel) {
-        return tileInformation.get(tileLabel);
-    }
-
-    private void setTilePosition(int tileLabel, int tilePosition) {
-        tileInformation.put(tileLabel, tilePosition);
-        System.out.println("registered " + tileLabel + " at " + tilePosition);
     }
 
 
     // Register a tile with the controller
     public void registerTile(EightTile tile) {
-        setTilePosition(tile.getTileLabel(), tile.getPosition());
         tile.addVetoableChangeListener(this);
     }
     
@@ -55,8 +36,10 @@ public class EightController extends JLabel implements VetoableChangeListener {
         int oldLabel = (int) evt.getOldValue();
         int newLabel = (int) evt.getNewValue();
 
-        int tilePosition = getTilePosition(oldLabel);
-        int currentHolePosition = getTilePosition(9);
+
+        EightTile tile = (EightTile) evt.getSource();
+        int tilePosition = tile.getPosition();
+        int currentHolePosition = this.holePosition;
 
         // Check the veto policy
         if (!isValidMove(tilePosition, oldLabel, newLabel, currentHolePosition)) {
