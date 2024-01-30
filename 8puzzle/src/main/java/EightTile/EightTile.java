@@ -95,7 +95,7 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
             vetos.fireVetoableChange("label", oldLabel, newLabel);
 
             setTileLabel(9);
-            // TODO: pass, in some way, its previous label value to the current hole
+            // TODO: pass, in some way, oldLabel to the currentHole
         } catch (PropertyVetoException e1) {
             // TODO: flash color to red for half a second
         }

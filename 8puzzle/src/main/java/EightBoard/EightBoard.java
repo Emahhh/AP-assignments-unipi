@@ -107,12 +107,15 @@ public class EightBoard extends JFrame {
     private void restartGame() {
 
         Collections.shuffle(tiles);
-        int i =1;
-            for (EightTile tile : tiles) {
-                RestartEvent event = new RestartEvent(i);
-                tile.onRestart(event);
-                i++;
+        int label =1;
+        for (EightTile tile : tiles) {
+            RestartEvent event = new RestartEvent(label);
+            tile.onRestart(event);
+            if (label == 9) {
+                controller.setHolePosition(tile.getPosition());
             }
+            label++;
+        }
         
     }
 
