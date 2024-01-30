@@ -12,14 +12,14 @@ import java.util.Map;
 
 public class EightController extends JLabel implements VetoableChangeListener {
 
-    private int holePosition = -1;
+    private EightTile holeTile = null;
 
     public EightController() {
         setText("START"); // initial message
     }
 
-    public void setHolePosition(int position) {
-        this.holePosition = position;
+    public void setHoleTile(EightTile tile) {
+        this.holeTile = tile;
     }
 
 
@@ -43,7 +43,7 @@ public class EightController extends JLabel implements VetoableChangeListener {
 
         EightTile tile = (EightTile) evt.getSource();
         int tilePosition = tile.getPosition();
-        int currentHolePosition = this.holePosition;
+        int currentHolePosition = this.holeTile.getPosition();
 
         // Check the veto policy
         if (!isValidMove(tilePosition, oldLabel, newLabel, currentHolePosition)) {
@@ -51,7 +51,12 @@ public class EightController extends JLabel implements VetoableChangeListener {
             throw new PropertyVetoException("Illegal move", evt);
         } else {
             setText("OK");
-            this.holePosition = tilePosition;
+
+            // the tile that is currently a hole, changes its label
+            this.holeTile.setTileLabel(oldLabel);
+
+            // the tile that has just been clicked become the new hole
+            setHoleTile(tile);
         }
     
     }

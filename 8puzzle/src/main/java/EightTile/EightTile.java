@@ -44,7 +44,7 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
     }
 
 
-    private void setTileLabel(int newLabel){
+    public void setTileLabel(int newLabel){
 
         if (newLabel < 1 || newLabel > 9) {
             throw new IllegalArgumentException("Tile label must be between 1 and 9");
@@ -65,15 +65,6 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
             setBackground(Color.YELLOW);
             setText(Integer.toString(newLabel));
         }
-    }
-
-    /**
-     * Sets the new label value and updates the appearance.
-     * To be used when resetting the board. 
-     * @param newLab new label value to be assigned to the tile
-     */
-    public void reset(int newLab){
-        setTileLabel(newLab);
     }
 
 

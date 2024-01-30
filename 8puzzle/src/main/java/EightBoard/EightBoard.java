@@ -112,7 +112,7 @@ public class EightBoard extends JFrame {
             RestartEvent event = new RestartEvent(label);
             tile.onRestart(event);
             if (label == 9) {
-                controller.setHolePosition(tile.getPosition());
+                controller.setHoleTile(tile);
             }
             label++;
         }
