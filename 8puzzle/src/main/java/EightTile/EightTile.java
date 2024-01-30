@@ -62,7 +62,6 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
             throw new IllegalArgumentException("Tile label must be between 1 and 9");
         }
 
-        System.out.println("Setting label " + newLabel + " for tile " + position);
 
         this.tileLabel = newLabel;
 

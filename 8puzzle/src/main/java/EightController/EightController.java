@@ -83,11 +83,7 @@ public class EightController extends JLabel implements VetoableChangeListener {
         int colonna2 = (position2 - 1) % 3;
 
         boolean adjacent = Math.abs(riga1 - riga2) + Math.abs(colonna1 - colonna2) == 1;
-        if (adjacent){
-            System.out.println("positions " +position1+" and "+position2+" are adjacent");
-        } else {
-            System.out.println("positions " +position1+" and "+position2+" are not adjacent");
-        }
+
         return adjacent;
     }
 
