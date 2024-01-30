@@ -151,7 +151,7 @@ public class EightBoard extends JFrame {
             tile2.setTileLabel(temp);
         } catch(IllegalStateException e){
             // alert the user about the rules
-            JOptionPane.showMessageDialog(this, "Flipping is only permitted when the hole is at position 9.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Flipping is only permitted when the hole is in the bottom-right corner (position 9).", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
     }
