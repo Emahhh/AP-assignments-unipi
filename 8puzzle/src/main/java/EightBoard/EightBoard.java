@@ -23,6 +23,7 @@ public class EightBoard extends JFrame {
 
     public EightBoard() {
         controller = new EightController();
+        
     
 
         // Initializing tiles -----------------------------
@@ -79,6 +80,8 @@ public class EightBoard extends JFrame {
         // Create a panel for the tiles
         JPanel tilePanel = new JPanel();
         tilePanel.setLayout(new GridLayout(3, 3));
+        tilePanel.setBackground(Color.lightGray); // TODO: style
+        tilePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         for (EightTile tile : tiles) {
             tilePanel.add(tile);
         }

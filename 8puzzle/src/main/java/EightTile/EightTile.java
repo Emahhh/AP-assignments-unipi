@@ -20,11 +20,22 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
     private int tileLabel; //TODO: both bound and costrained
     private final VetoableChangeSupport vetos = new VetoableChangeSupport(this); // so that the controller can veto changes to the label
 
+    // Colors
+    private final Color holeColor = Color.darkGray;
+    private final Color wrongPositionColor = Color.YELLOW;
+    private final Color rightPositionColor = Color.GREEN;
+    private final Color blinkColor = Color.RED;
+    
+
 
     public EightTile(int position, int label) {
         this.position = position;
         setTileLabel(label); // to update appearance
         addActionListener(this); // Register as a listener for button click events
+
+        setFont(new java.awt.Font("Monospaced", 1, 40));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setMargin(new java.awt.Insets(0, 0, 0, 0));
     }
 
     @Override
@@ -44,28 +55,29 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
     }
 
 
-    public void setTileLabel(int newLabel){
-
+    public void setTileLabel(int newLabel) {
         if (newLabel < 1 || newLabel > 9) {
             throw new IllegalArgumentException("Tile label must be between 1 and 9");
         }
 
         System.out.println("Setting label " + newLabel + " for tile " + position);
-    
+
         this.tileLabel = newLabel;
 
         if (newLabel == 9) { // Current hole
-            setBackground(Color.GRAY);  
+            setBackground(new java.awt.Color(255, 255, 51));
             setText("");
             return;
         } else if (position == newLabel) {
-            setBackground(Color.GREEN);
+            setBackground(new java.awt.Color(255, 255, 51));
             setText(Integer.toString(newLabel));
         } else {
-            setBackground(Color.YELLOW);
+            setBackground(new java.awt.Color(255, 255, 51));
             setText(Integer.toString(newLabel));
         }
+
     }
+
 
 
     /**
@@ -86,7 +98,6 @@ public class EightTile extends JButton implements ActionListener, RestartEventLi
             vetos.fireVetoableChange("label", oldLabel, newLabel);
 
             setTileLabel(9);
-            // TODO: pass, in some way, oldLabel to the currentHole
         } catch (PropertyVetoException e1) {
             // TODO: flash color to red for half a second
         }
