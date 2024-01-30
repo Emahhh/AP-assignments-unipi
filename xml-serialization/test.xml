@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Student>
+	<firstName>Jane</firstName>
+	<surname>Doe</surname>
+	<age>42</age>
+</Student>
+<notXMLable />
+<notXMLable />
+<Car>
+	<MARCA>Ford</MARCA>
+	<model>Mustang</model>
+	<price>50000</price>
+</Car>
+<Student>
+	<firstName>Pippo</firstName>
+	<surname>Pippi</surname>
+	<age>42</age>
+</Student>
+<Car>
+	<MARCA>Fiat</MARCA>
+	<model>Punto</model>
+	<price>30000</price>
+</Car>
