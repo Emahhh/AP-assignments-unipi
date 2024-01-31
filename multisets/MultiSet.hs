@@ -17,33 +17,32 @@ empty = MS []
 -- returns a multiset obtained by adding the element `v` to `mset`
 -- added the costraint `Eq a` to the type signature so that we are sure we can compare elements (to check if already present)
 add :: Eq a => (MSet a) -> a -> (MSet a) 
-add (MSet mset) v =
+add (MS mset) v =
     -- check if element already present
     if elem v (map fst mset) then
-        MSet (map incrementEntry v mset) -- if element already present, increment its multiplicity
+        MS (map incrementEntry v mset) -- if element already present, increment its multiplicity
     else
-        MSet (mset ++ [(v, 1)]) -- if element not present, I concatenate a new entry
+        MS (mset ++ [(v, 1)]) -- if element not present, I concatenate a new entry
 
-    where incrementEntry v (currKey, currVal) =
-        if currKey == v then (currKey, currVal + 1) else (currKey, currVal)
+    where incrementEntry v (currKey, currVal) = if currKey == v then (currKey, currVal + 1) else (currKey, currVal)
 
 
 
 -- returns the number of occurrences of `v` in `mset`
 occs :: Eq a => (MSet a) -> a -> Int
-occs (MSet mset) v = 
+occs (MS mset) v = 
     case mset of
         [] -> 0 -- if mset is empty, I found 0 occurrences of v
-        (currVal, currMult):rest -> if currVal == v then currMult else occs (MSet rest) v -- I check if the current element is the one I'm looking for
+        (currVal, currMult):rest -> if currVal == v then currMult else occs (MS rest) v -- I check if the current element is the one I'm looking for
 
 -- returns a list containing all the elements in `mset`
-elems :: Mset a -> [a] 
-elems (MSet mset) =
+elems :: MSet a -> [a] 
+elems (MS mset) =
     foldl util [] mset
     where util acc (currKey, _) = currKey:acc -- I add the current element to the list
 
 -- returns `True` iff each element of `mset1` is also an element of `mset2`, with at least the same multiplicity
-subeq :: Eq a => (Mset a) -> (Mset a) -> Bool
+subeq :: Eq a => (MSet a) -> (MSet a) -> Bool
 subeq mset1 mset2 =
     case mset1 of
         [] -> True
@@ -59,7 +58,7 @@ addNTimes v n (MS mset) =
 
 -- returns a MSet having all elements of `mset1` and of `mset2`, each with the sum of the corresponding multiplicities
 -- to implement this, I add to `mset1` each element of `mset2`, as many times as it occurs in `mset2`
-union :: Eq a => (Mset a) -> (Mset a) -> (Mset a)
+union :: Eq a => (MSet a) -> (MSet a) -> (MSet a)
 union mset1 mset2 =
     map util mset1
     where util (currKey, currMult) = addNTimes mset2 currKey currMult
@@ -81,7 +80,7 @@ instance Eq a => Eq (MSet a) where
 -- Defining MSet to be an instance of Foldable.
 -- implementing `foldr` is enough (minimal set of fucntion to be implemented according to the documentation of `Foldable`)
 -- TODO: comment
-instance Foldable (MSet a)
+instance Foldable MSet where
     foldr fun acc (MS []) = acc
     foldr fun acc (MS (key,_):rest) = fun key (foldr fun acc (MS rest))
 
