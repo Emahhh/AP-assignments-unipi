@@ -46,6 +46,7 @@ subeq (MS ((currKey, currMult):rest)) mset2 = if currMult > occs mset2 currKey t
 
 -- additional function (not required by the exercise) added to implement the next one
 -- runs the `add` function `n` times on value `v`
+-- TODO: ADD TYPE SIGNATURES
 addNTimes v n mset =
     if n <= 0 then mset
     else addNTimes v (n-1) (add mset v)
@@ -76,7 +77,6 @@ instance Eq a => Eq (MSet a) where
 
 -- Defining MSet to be an instance of Foldable.
 -- implementing `foldr` is enough (minimal set of fucntion to be implemented according to the documentation of `Foldable`)
--- TODO: comment
 instance Foldable MSet where
     foldr fun acc (MS []) = acc
     foldr fun acc (MS ((key,_):rest)) = fun key (foldr fun acc (MS rest))
