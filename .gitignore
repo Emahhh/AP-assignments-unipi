@@ -87,3 +87,4 @@ npm-debug.log
 yarn-error.log
 /8puzzle/target/
 /xml-serialization/target/
+/jobscheduler/target/
