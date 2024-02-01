@@ -1,4 +1,4 @@
-package xmlser.jobscheduler;
+package jobsched;
 
 import java.util.stream.Stream;
 

@@ -1,4 +1,4 @@
-package xmlser.jobscheduler;
+package jobsched;
 
 public class Pair<K,V>{
     K key;
