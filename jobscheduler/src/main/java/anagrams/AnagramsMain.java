@@ -1,13 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package anagrams;
 
-/**
- *
- * @author ema
- */
+import jobsched.Jobscheduler;
+
+
 public class AnagramsMain {
+
+    public static void main() {
+        AskUserEmitStrategy askStrat = new AskUserEmitStrategy();
+        TxtOutputStrategy txtStrat = new TxtOutputStrategy();
+
+        Jobscheduler myScheduler = new Jobscheduler<String, String>(askStrat, txtStrat);
+        myScheduler.runPipeline(); // starts the framework by executing the whole pipeline
+    }
     
 }
