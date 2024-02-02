@@ -41,8 +41,7 @@ public class Jobscheduler<K, V> {
      */
     public Stream<Pair<K, V>> compute(Stream<AJob<K, V>> jobs) {
         return jobs
-            .flatMap(job -> job.execute())
-            .peek(System.out::println);
+            .flatMap(job -> job.execute());
     }
 
 
