@@ -5,7 +5,7 @@ import jobsched.Jobscheduler;
 
 public class AnagramsMain {
 
-    public static void main() {
+    public static void main(String[] args){
         AskUserEmitStrategy askStrat = new AskUserEmitStrategy();
         TxtOutputStrategy txtStrat = new TxtOutputStrategy();
 

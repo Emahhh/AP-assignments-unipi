@@ -21,7 +21,15 @@ public class AskUserEmitStrategy implements EmitStrategy {
     @Override
     public Stream<AnagramsJob> emit() {
         System.out.println("Insert the absolute path of the directory containing the documents: ");
-        String path = System.console().readLine();
+        String path;
+        
+        try {
+            path = System.console().readLine();
+        } catch (Exception e){
+            System.err.println("Error while reading the path from the user: " + e.getMessage());
+            return Stream.empty();
+        }
+        
         Path dirPath = Paths.get(path);
 
         try {
