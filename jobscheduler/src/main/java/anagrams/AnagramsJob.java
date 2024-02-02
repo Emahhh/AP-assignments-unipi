@@ -9,7 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import jobsched.AJob;
@@ -34,28 +36,33 @@ public class AnagramsJob extends AJob<String, String> {
      */
     @Override
     public Stream<Pair<String, String>> execute() {
-        // reads the file filename
+        List<Pair<String, String>> pairs = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(this.filename))) {
-                System.out.println("Executing the job for the file " + filename + "...\n");
-                return br
-                    .lines()
-                    .peek(System.out::println)
-                    .flatMap(line -> Arrays.stream(line.split(" ")))
-                    .filter(AnagramsJob::filterPredicate) // to filter out words of less than four characters
-                    .map(String::toLowerCase)
-                    .map(w -> new Pair<String, String>(ciao(w), w) );
-
-                    
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] words = line.split("\\s+");
+                for (String word : words) {
+                    if (filterPredicate(word)) {
+                        String sortedWord = sortCharsInWord(word);
+                        pairs.add(new Pair<>(sortedWord, word));
+                    }
+                }
+            }
         } catch (FileNotFoundException e) {
             System.err.println("Error, file not found: " + filename + ": " + e.getMessage());
             e.printStackTrace();
-            return Stream.empty();
         } catch (IOException e) {
-            System.err.println("Error while executing the job for the file " + filename + ": " + e.getMessage());
+            System.err.println("Error while reading the file " + filename + ": " + e.getMessage());
             e.printStackTrace();
-            return Stream.empty();
         }
+        return pairs.stream();
     }
+
+private String sortCharsInWord(String word) {
+    char[] chars = word.toCharArray();
+    Arrays.sort(chars);
+    return new String(chars);
+}
 
     /**
      * Returns False for words of less than four characters, and those containing non-alphabetic characters.
