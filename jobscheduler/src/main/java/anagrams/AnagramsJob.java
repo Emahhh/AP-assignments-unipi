@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import jobsched.AJob;
@@ -37,11 +38,12 @@ public class AnagramsJob extends AJob<String, String> {
         try (BufferedReader br = new BufferedReader(new FileReader(this.filename))) {
                 System.out.println("Executing the job for the file " + filename + "...\n");
                 return br
-                    .lines().peek(System.out::println)
-                    .flatMap(line -> Stream.of(line.toLowerCase().split("\\s+"))) // to get lowercase words
+                    .lines()
+                    .peek(System.out::println)
+                    .flatMap(line -> Arrays.stream(line.split(" ")))
                     .filter(AnagramsJob::filterPredicate) // to filter out words of less than four characters
-                    //.peek(System.out::println)
-                    .map(w -> new Pair<String, String>(ciao(w), w));
+                    .map(String::toLowerCase)
+                    .map(w -> new Pair<String, String>(ciao(w), w) );
 
                     
         } catch (FileNotFoundException e) {
@@ -61,7 +63,7 @@ public class AnagramsJob extends AJob<String, String> {
      * @param str
      * @return
      */
-    public static Boolean filterPredicate(String str){
+    private static Boolean filterPredicate(String str){
         return str.length() >= 4 && !str.chars().anyMatch((c) -> !Character.isAlphabetic(c));
     }
 
@@ -70,7 +72,7 @@ public class AnagramsJob extends AJob<String, String> {
      * @param str
      * @return the string having the same length of str and containing all the characters of str in lower case and alphabetical order.
      */
-    public static String ciao(String str){
+    private static String ciao(String str){
         return str
             .toLowerCase()
             .chars()
