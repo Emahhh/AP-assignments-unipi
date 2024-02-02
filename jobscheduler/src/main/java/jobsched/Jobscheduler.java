@@ -11,10 +11,22 @@ import jobsched.AJob;
  */
 public class Jobscheduler<K, V> {
 
-    public Stream<AJob<K, V>> emit(EmitStrategy<K, V> emitStrategy) {
-        return emitStrategy.emit();
+    private final EmitStrategy<K, V> emitStrategy;
+    private final OutputStrategy<K, V> outputStrategy;
+
+    /**
+     * Constructor that allows to specify the strategies for both emit and output.
+     * @param emitStrategy the strategy for emitting a stream of jobs
+     * @param outputStrategy the strategy for printing the results
+     */
+    public Jobscheduler(EmitStrategy<K, V> emitStrategy, OutputStrategy<K, V> outputStrategy) {
+        this.emitStrategy = emitStrategy;
+        this.outputStrategy = outputStrategy;
     }
 
+    public Stream<AJob<K, V>> emit() {
+        return emitStrategy.emit();
+    }
 
     /**
      * Computes all jobs by calling {@link AJob#execute()} and concatenating the results.
@@ -27,7 +39,7 @@ public class Jobscheduler<K, V> {
     }
 
 
-    public void output(Stream<Pair<K, List<V>>> myStream, OutputStrategy<K, V> outputStrategy) {
+    public void output(Stream<Pair<K, List<V>>> myStream) {
         outputStrategy.output(myStream);
     }
 
@@ -36,7 +48,7 @@ public class Jobscheduler<K, V> {
      * executes the whole pipeline implemented by the framework
      */
     public void computeAndPrint(){
-        
+
 
     }
 }
