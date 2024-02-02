@@ -5,6 +5,8 @@
 package anagrams;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.stream.Stream;
@@ -32,16 +34,22 @@ public class AnagramsJob extends AJob<String, String> {
     @Override
     public Stream<Pair<String, String>> execute() {
         // reads the file filename
-        try (FileInputStream fis = new FileInputStream(filename);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(this.filename))) {
+                System.out.println("Executing the job for the file " + filename + "...\n");
                 return br
-                    .lines()
+                    .lines().peek(System.out::println)
                     .flatMap(line -> Stream.of(line.toLowerCase().split("\\s+"))) // to get lowercase words
                     .filter(AnagramsJob::filterPredicate) // to filter out words of less than four characters
+                    //.peek(System.out::println)
                     .map(w -> new Pair<String, String>(ciao(w), w));
 
                     
+        } catch (FileNotFoundException e) {
+            System.err.println("Error, file not found: " + filename + ": " + e.getMessage());
+            e.printStackTrace();
+            return Stream.empty();
         } catch (IOException e) {
+            System.err.println("Error while executing the job for the file " + filename + ": " + e.getMessage());
             e.printStackTrace();
             return Stream.empty();
         }
@@ -70,4 +78,7 @@ public class AnagramsJob extends AJob<String, String> {
             .toString();
     }
     
+    public String toString(){
+        return "This is a `AnagramsJob` for the file " + filename + ".\n";
+    }
 }

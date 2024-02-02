@@ -1,6 +1,7 @@
 package jobsched;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import jobsched.AJob;
 
@@ -40,7 +41,8 @@ public class Jobscheduler<K, V> {
      */
     public Stream<Pair<K, V>> compute(Stream<AJob<K, V>> jobs) {
         return jobs
-            .flatMap(job -> job.execute());
+            .flatMap(job -> job.execute())
+            .peek(System.out::println);
     }
 
 
@@ -49,22 +51,20 @@ public class Jobscheduler<K, V> {
      * @param myPairsStream
      * @return
      */
-    public Stream< Pair<K, List<V>> > collect(Stream<Pair<K, V>> myPairsStream){
+    public Stream<Pair<K, List<V>>> collect(Stream<Pair<K, V>> myPairsStream){
         return myPairsStream
-            .peek(e -> System.out.println(e))
             .collect(
                 // supplier function: creates an empty container
                 () -> new java.util.ArrayList<Pair<K, List<V>>>() ,
                 // accumulator function: adds an element to the container
-                (list, e) -> list.add(new Pair<K, List<V>>(e.getKey(), List.of(e.getValue()))) ,
+                (list, e) -> list.add(new Pair<K, List<V>>(e.getKey(), List.of(e.getValue()))),
                 // combiner function: combines 2 containers
                 (list1, list2) -> list1.addAll(list2) 
             )
-            .stream()
-            .peek(e -> System.out.println(e));
-
+            .stream(); // convert the list to a stream
     }
 
+    
     /**
      * Outputs the results of the jobs, according to the strategy specified in the constructor
      * @param myStream a stream of {@link Pair}s containing the results of the jobs (computed after calling {@link #collect()})
@@ -80,8 +80,11 @@ public class Jobscheduler<K, V> {
      */
     public void runPipeline(){
         Stream<AJob<K, V>> emitted = emit();
+        // emitted.peek(System.out::println);
         Stream<Pair<K, V>> computed = compute(emitted);
+        // computed.peek(System.out::println);
         Stream<Pair<K, List<V>>> collected = collect(computed);
+        // collected.peek(System.out::println);
         output(collected);
     }
 }

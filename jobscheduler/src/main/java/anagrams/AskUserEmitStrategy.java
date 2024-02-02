@@ -37,7 +37,8 @@ public class AskUserEmitStrategy implements EmitStrategy {
                     .filter(Files::isRegularFile) // Filter out directories and special files
                     .map(p -> new AnagramsJob(p.toString())) // passes the Path as a string
                     .collect(Collectors.toList())
-                    .stream(); // Convert the list to a stream
+                    .stream() // Convert the list to a stream
+                    ;
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         } finally {
