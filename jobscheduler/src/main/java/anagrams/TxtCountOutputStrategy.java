@@ -12,16 +12,16 @@ import jobsched.Pair;
 
 
 /**
- * Additional strategy that writes the results in a .txt file, 
- * in the format is `key : listOfWords`
+ * Strategy that writes the results in a .txt file, 
+ * in the format is `key : wordsCount`
  */
-public class TxtAnagramsOutputStrategy implements OutputStrategy <String, String> {
+public class TxtCountOutputStrategy implements OutputStrategy <String, String> {
 
-    private static final String FILE_NAME = "anagrams.txt";
+    private static final String FILE_NAME = "count_anagrams.txt";
 
     /**
      * For each line, 
-     * it writes the single key and the list of strings associated with each key
+     * it writes the key and the length of the list of words associated with each key
      */
     @Override
     public void output(Stream<Pair<String, List<String>>> myStream) {
@@ -29,7 +29,7 @@ public class TxtAnagramsOutputStrategy implements OutputStrategy <String, String
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(FILE_NAME))) {
         myStream.forEach(pair -> {
             try {
-                writer.write(pair.getKey() + " : " + pair.getValue() + "\n");
+                writer.write(pair.getKey() + " : " + pair.getValue().size() + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
