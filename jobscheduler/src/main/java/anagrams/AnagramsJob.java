@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jobsched.AJob;
@@ -66,14 +67,13 @@ public class AnagramsJob extends AJob<String, String> {
      * @return the string having the same length of str and containing all the characters of str in lower case and alphabetical order.
      */
     private static String ciao(String str){
-        return str
-            .toLowerCase()
-            .chars()
+        return Stream
+            .of(str.split(""))
             .sorted()
-            .toString();
+            .collect(Collectors.joining()); // joins the stream of characters into a single string
     }
     
     public String toString(){
-        return "This is a `AnagramsJob` for the file " + filename + ".\n";
+        return "This is an `AnagramsJob` for the file " + filename + ".\n";
     }
 }
