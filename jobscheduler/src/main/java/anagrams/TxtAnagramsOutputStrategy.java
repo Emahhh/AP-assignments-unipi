@@ -10,13 +10,18 @@ import java.util.stream.Stream;
 import jobsched.OutputStrategy;
 import jobsched.Pair;
 
-public class TxtOutputStrategy implements OutputStrategy <String, String> {
+
+/**
+ * Additional strategy that writes the results in a file.
+ * The format is `key : listOfWords` TODO: fare quello richiesto, con solo il numero
+ */
+public class TxtAnagramsOutputStrategy implements OutputStrategy <String, String> {
 
     private static final String FILE_NAME = "count_anagrams.txt";
 
     /**
      * For each line, 
-     * it writes the list of ciao keys and the number of words associated with each key
+     * it writes the list of ciao keys and the list of words associated with each key
      */
     @Override
     public void output(Stream<Pair<String, List<String>>> myStream) {
@@ -24,7 +29,7 @@ public class TxtOutputStrategy implements OutputStrategy <String, String> {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(FILE_NAME))) {
         myStream.forEach(pair -> {
             try {
-                writer.write(pair.toString()+"\n");
+                writer.write(pair.getKey() + " : " + pair.getValue() + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }

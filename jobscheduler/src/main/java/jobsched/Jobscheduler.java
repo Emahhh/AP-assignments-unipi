@@ -1,6 +1,10 @@
 package jobsched;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import jobsched.AJob;
@@ -47,20 +51,22 @@ public class Jobscheduler<K, V> {
 
     /**
      * Groups all the pairs with the same keys in a single pair, having the same key and the list of all values.
+     * Attention: it removes duplicates.
      * @param myPairsStream
      * @return
      */
-    public Stream<Pair<K, List<V>>> collect(Stream<Pair<K, V>> myPairsStream){
+    public Stream<Pair<K, List<V>>> collect(Stream<Pair<K, V>> myPairsStream) {
         return myPairsStream
-            .collect(
-                // supplier function: creates an empty container
-                () -> new java.util.ArrayList<Pair<K, List<V>>>() ,
-                // accumulator function: adds an element to the container
-                (list, e) -> list.add(new Pair<K, List<V>>(e.getKey(), List.of(e.getValue()))),
-                // combiner function: combines 2 containers
-                (list1, list2) -> list1.addAll(list2) 
-            )
-            .stream(); // convert the list to a stream
+            .collect(Collectors
+                    // Group the pairs by their keys
+                    .groupingBy(
+                            Pair::getKey,
+                            Collectors.mapping(
+                                    Pair::getValue, // Extract the value from each pair
+                                    Collectors.toCollection(LinkedHashSet::new)))) // Collect the values into a DS that doesn't allow duplicates - so that the same word is not considered as an anagram of itself
+            .entrySet() // returns a set of entries
+            .stream()
+            .map(e -> new Pair<>(e.getKey(), new ArrayList<>(e.getValue()))); // transforms each `Entry` into a `Pair`
     }
 
     
