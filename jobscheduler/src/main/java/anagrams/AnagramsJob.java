@@ -43,6 +43,8 @@ public class AnagramsJob extends AJob<String, String> {
             System.out.println("Error, file not found: " + this.filename);
             return Stream.empty();
         }
+
+        System.out.println("Executing the job for the file: " + this.filename + "...");
         return br
             .lines()
             .flatMap(s -> Arrays.stream(s.split(" ")))

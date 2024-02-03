@@ -85,11 +85,8 @@ public class Jobscheduler<K, V> {
      */
     public void runPipeline(){
         Stream<AJob<K, V>> emitted = emit();
-        // emitted.peek(System.out::println);
         Stream<Pair<K, V>> computed = compute(emitted);
-        // computed.peek(System.out::println);
         Stream<Pair<K, List<V>>> collected = collect(computed);
-        // collected.peek(System.out::println);
         output(collected);
     }
 }
