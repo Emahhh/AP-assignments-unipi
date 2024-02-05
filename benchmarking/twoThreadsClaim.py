@@ -146,3 +146,18 @@ if __name__ == "__main__":
     test(fun=inefficient_fibo, args=my_args, iterations=10);
     
     print("All tests done!")
+    
+    
+    
+"""
+When running tests on a CPU-intensive task such as `grezzo` or `inefficient_fibo`, the results suggest that by doubling the number of threads, the running time does not decrease (it even increases slightly, likely due to the overhead of creating and joining threads).
+It is clear that using threads with these functions does not help to get better performance.
+
+When running tests on an IO-bound task as `just_wait`, on the other hand, we can notice that the running time halves when doubling the number of threads.
+
+We can hence conclude that:
+- Using (Python) threads is beneficial when dealing with IO-bound tasks, but not when dealing with CPU-intensive tasks.
+- The claim ("Two threads calling a function may take twice as much time as a single thread calling the function twice") stands generally true, but we clarify that, in the case of IO-bound tasks, the time generally decreases.
+
+Tests ran on Apple M2 Octa-Core Processor, 4x @ 3.20 GHz + 4x @ 2.00 GHz (ARM64)
+"""
