@@ -4,6 +4,11 @@ import statistics
 import threading
 import time
 
+def run_n_times(func, n, args, kwargs):
+    for _ in range(n):
+        func(*args, **kwargs)
+
+
 def bench(n_threads=1, seq_iter=1, iter=1):
     
     bench_dict = {
@@ -11,10 +16,6 @@ def bench(n_threads=1, seq_iter=1, iter=1):
         'seq_iter': seq_iter,
         'iter': iter
     };
-    
-    def run_n_times(func, n, args, kwargs):
-        for _ in range(n):
-            func(*args, **kwargs)
     
     @functools.wraps(bench)
     def bench_decorator(func):
@@ -48,7 +49,9 @@ def bench(n_threads=1, seq_iter=1, iter=1):
             
             # calculating the mean and variance for all these iterations
             mean = statistics.mean(times)
-            variance = statistics.variance(times)
+            variance = 0
+            if len(times) > 1: # to avoid errors with only 1 value
+                variance = statistics.variance(times)
             
             bench_dict['mean'] = mean
             bench_dict['variance'] = variance
@@ -60,10 +63,35 @@ def bench(n_threads=1, seq_iter=1, iter=1):
     return bench_decorator
 
 
-@bench(seq_iter=2, iter=2)
-def benched_print(str):
-    print("prova " + str);
+
+def test (iter, fun, args):
+    """
+    executes fun on args with varying numbers of iterations and degrees of parallelism:
+    - execute 16 times fun on args on a single thread (passing iter as further parameter)
+    - run fun 8 times on two threads
+    - then 4 times on 4 threads
+    - finally, 2 times on 8 threads.
+    
+    Writes the results from the 4 invocantions into a set of files named `<fun>_<args>_<n_threads>_<seq_iter>`
+    """
+    
+    @bench(n_threads=1, seq_iter=iter, iter=1)
+    def bench_func(*args, **kwargs):
+        return fun(*args, **kwargs)
+    
+    return bench_func(*args)
+    
+    
+    
+def just_wait(n): # NOOP for n/10 seconds
+    time.sleep(n * 0.1)
+
+def grezzo(n): # CPU intensive
+    for i in range(2**n):
+        pass   
+
+
 
 if __name__ == "__main__":
-    bench_result =benched_print("hello world")
-    print(bench_result)
+    my_args = (1,);
+    test(fun=just_wait, args=my_args, iter=100);
