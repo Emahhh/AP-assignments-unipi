@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import functools
+import os
 import statistics
 import threading
 import time
+
+BASE_FOLDER = './results'
 
 def run_n_times(func, n, args, kwargs):
     for _ in range(n):
@@ -19,7 +22,8 @@ def bench(n_threads=1, seq_iter=1, iter=1):
     
     @functools.wraps(bench)
     def bench_decorator(func):
-        bench_dict['func'] = func.__name__
+        func_name = func.__name__
+        bench_dict['func'] = func_name
         
         def wrapper(*args, **kwargs):
             # Now I run `func` in `n_threads` threads, `seq_iter` times each. 
@@ -28,7 +32,7 @@ def bench(n_threads=1, seq_iter=1, iter=1):
             # I will store here the time needed for each iter
             times = []
 
-            for _ in range(iter):
+            for i in range(iter):
                 threads = [];
                 
                 for _ in range(n_threads):
@@ -45,6 +49,7 @@ def bench(n_threads=1, seq_iter=1, iter=1):
                 end_time = time.perf_counter()
                 time_delta = end_time - start_time
                 times.append(time_delta)
+                print("Computed iteration {} of {} in {} seconds".format(i, func_name, time_delta));
             # end for _ in range(iter)
             
             # calculating the mean and variance for all these iterations
@@ -64,7 +69,7 @@ def bench(n_threads=1, seq_iter=1, iter=1):
 
 
 
-def test (iter, fun, args):
+def test (iterations, fun, args):
     """
     executes fun on args with varying numbers of iterations and degrees of parallelism:
     - execute 16 times fun on args on a single thread (passing iter as further parameter)
@@ -75,11 +80,42 @@ def test (iter, fun, args):
     Writes the results from the 4 invocantions into a set of files named `<fun>_<args>_<n_threads>_<seq_iter>`
     """
     
-    @bench(n_threads=1, seq_iter=iter, iter=1)
-    def bench_func(*args, **kwargs):
+    @bench(n_threads=1, seq_iter=16, iter=iterations)
+    def test1(*args, **kwargs):
         return fun(*args, **kwargs)
     
-    return bench_func(*args)
+    @bench(n_threads=2, seq_iter=8, iter=iterations)
+    def test2(*args, **kwargs):
+        return fun(*args, **kwargs)
+    
+    @bench(n_threads=4, seq_iter=4, iter=iterations)
+    def test4(*args, **kwargs):
+        return fun(*args, **kwargs)
+    
+    @bench(n_threads=8, seq_iter=2, iter=iterations)
+    def test8(*args, **kwargs):
+        return fun(*args, **kwargs)
+    
+    bench_dict_1 = test1(*args);
+    bench_dict_2 = test2(*args);
+    bench_dict_4 = test4(*args);
+    bench_dict_8 = test8(*args);
+    
+    # if directory doesn't exist, create it
+    try:
+        os.mkdir(BASE_FOLDER)
+    except:
+        pass
+    
+    # write to file
+    with open(f'{BASE_FOLDER}/{fun.__name__}_{str(args)}_1_16.txt', 'w') as f:
+        f.write(f'{bench_dict_1}\n')
+    with open(f'{BASE_FOLDER}/{fun.__name__}_{str(args)}_2_8.txt', 'w') as f:
+        f.write(f'{bench_dict_2}\n')
+    with open(f'{BASE_FOLDER}/{fun.__name__}_{str(args)}_4_4.txt', 'w') as f:
+        f.write(f'{bench_dict_4}\n')
+    with open(f'{BASE_FOLDER}/{fun.__name__}_{str(args)}_8_2.txt', 'w') as f:
+        f.write(f'{bench_dict_8}\n')
     
     
     
@@ -90,8 +126,22 @@ def grezzo(n): # CPU intensive
     for i in range(2**n):
         pass   
 
+def inefficient_fibo(n):
+    if n < 2:
+        return n
+    else:
+        return inefficient_fibo(n-1) + inefficient_fibo(n-2)
 
 
 if __name__ == "__main__":
+    print("Running tests...")
+    
     my_args = (1,);
-    test(fun=just_wait, args=my_args, iter=100);
+    test(fun=just_wait, args=my_args, iterations=10);
+    
+    my_args = (15,);
+    test(fun=grezzo, args=my_args, iterations=10);
+    
+    my_args = (35,);
+    test(fun=inefficient_fibo, args=my_args, iterations=10);
+    print("All tests done!")

@@ -1,0 +1,1 @@
+{'n_threads': 2, 'seq_iter': 8, 'iter': 10, 'func': 'test2', 'mean': 0.11460306259978097, 'variance': 1.0001675749599823e-06}
