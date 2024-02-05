@@ -12,6 +12,10 @@ def bench(n_threads=1, seq_iter=1, iter=1):
         'iter': iter
     };
     
+    def run_n_times(func, n, args, kwargs):
+        for _ in range(n):
+            func(*args, **kwargs)
+    
     @functools.wraps(bench)
     def bench_decorator(func):
         bench_dict['func'] = func.__name__
@@ -27,7 +31,7 @@ def bench(n_threads=1, seq_iter=1, iter=1):
                 threads = [];
                 
                 for _ in range(n_threads):
-                    t = threading.Thread() # TODO: add the arguments
+                    t = threading.Thread(target=run_n_times, args=(func, seq_iter, args, kwargs));
                     threads.append(t)
                 
                 start_time = time.perf_counter()
@@ -56,7 +60,7 @@ def bench(n_threads=1, seq_iter=1, iter=1):
     return bench_decorator
 
 
-@bench()
+@bench(seq_iter=2, iter=2)
 def benched_print(str):
     print("prova " + str);
 
