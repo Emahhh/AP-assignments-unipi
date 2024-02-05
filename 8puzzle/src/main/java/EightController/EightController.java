@@ -7,8 +7,6 @@ import EightTile.EightTile;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
-import java.util.HashMap;
-import java.util.Map;
 
 public class EightController extends JLabel implements VetoableChangeListener {
 
@@ -92,9 +90,5 @@ public class EightController extends JLabel implements VetoableChangeListener {
         return this.holeTile.getPosition() == 9;
     }
 
-
-    private void restart () {
-        // TODO: Implement the logic to restart the game
-    }
 
 }

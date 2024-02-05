@@ -46,7 +46,7 @@ subeq (MS ((currKey, currMult):rest)) mset2 = if currMult > occs mset2 currKey t
 
 -- additional function (not required by the exercise) added to implement the next one
 -- runs the `add` function `n` times on value `v`
--- TODO: ADD TYPE SIGNATURES
+addNTimes :: Eq a => a -> Int -> MSet a -> MSet a
 addNTimes v n mset =
     if n <= 0 then mset
     else addNTimes v (n-1) (add mset v)
@@ -54,7 +54,6 @@ addNTimes v n mset =
 
 -- returns a MSet having all elements of `mset1` and of `mset2`, each with the sum of the corresponding multiplicities
 -- to implement this, I add to `mset1` each element of `mset2`, as many times as it occurs in `mset2`
-
 union :: Eq a => MSet a -> MSet a -> MSet a
 union mset1 mset2 =
     let MS pairsList = mset2
@@ -85,8 +84,17 @@ instance Foldable MSet where
 
 -- map ----------------
 
--- TODO: Explain (in a comment in the same file) why it is not possible to define an instance of Functor for MSet by providing mapMSet as the implementation of fmap.
-mapMSet :: (a -> b) -> MSet a -> MSet b
-mapMSet fun (MS mset) = 
-    let mappedSet = map (\(x, y) -> (fun x, y)) mset
-    in MS mappedSet
+-- takes a function f :: a -> b and an MSet of type a as arguments
+-- and returns the MSet of type b obtained by applying f to all the elements of its second argument.
+mapMSet :: Eq a => (t -> a) -> MSet t -> MSet a
+mapMSet fun (MS mset) = foldl util (MS []) mset
+    where util acc (key, mult) = addNTimes (fun key) mult acc
+
+
+-- it is not possible to define an instance of Functor for MSet by providing mapMSet as the implementation of fmap
+-- because there is an incompatibility between the type signatures of the two functions:
+-- mapMSet requires that the type of the argument `a` is an instance of Eq
+-- but fmap does not have this costraint, as the documentation states: fmap :: (a -> b) -> f a -> f b
+
+-- instance Functor MSet where
+--     fmap = mapMSet
