@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import functools
+import statistics
 import threading
 import time
 
