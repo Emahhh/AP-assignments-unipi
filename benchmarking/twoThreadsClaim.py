@@ -139,9 +139,10 @@ if __name__ == "__main__":
     my_args = (1,);
     test(fun=just_wait, args=my_args, iterations=10);
     
-    my_args = (15,);
+    my_args = (25,);
     test(fun=grezzo, args=my_args, iterations=10);
     
     my_args = (35,);
     test(fun=inefficient_fibo, args=my_args, iterations=10);
+    
     print("All tests done!")
